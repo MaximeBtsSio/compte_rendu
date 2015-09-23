@@ -1,0 +1,10 @@
+all: 
+	gcc -fPIC -c -Wall journal.c
+	ar rcs libjournal.a journal.o
+	gcc -shared -fPIC -Wl,-soname,libjournal.so.1 -o libjournal.so.1.1.57 journal.o -lc
+	ln -sf libjournal.so.1 libjournal.so
+	ln -sf libjournal.so.1 libjournal.so.1
+	gcc -c -Wall main.c
+	gcc -o journal.static journal.o -L. -l:libjournal.a
+	gcc -o journal.shared main.o -L. -ljournal
+	LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH ./journal.shared
